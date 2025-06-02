@@ -12,7 +12,7 @@ nltk.download('stopwords')
 device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 
 model = AutoModelForSequenceClassification.from_pretrained("Urvashi12Dwivedi/mental-health-bert")
-model.to(device)
+
 model.eval()
 
 tokenizer = AutoTokenizer.from_pretrained("Urvashi12Dwivedi/mental-health-bert")
