@@ -8,16 +8,13 @@ from nltk.corpus import stopwords
 
 nltk.download('stopwords')
 
-# Make sure transformers & safetensors packages are up to date in your environment
-# pip install --upgrade transformers safetensors
-
 model_name = "Urvashi12Dwivedi/mental-health-bert"
 
-model = AutoModelForSequenceClassification.from_pretrained(model_name)  # no local_files_only
+model = AutoModelForSequenceClassification.from_pretrained(model_name, use_safetensors=True)
 model.eval()
 
 tokenizer = AutoTokenizer.from_pretrained(model_name)
-label_encoder = pickle.load(open("label_encoder.pkl","rb"))
+label_encoder = pickle.load(open("label_encoder.pkl", "rb"))
 
 stop_words = set(stopwords.words('english'))
 
@@ -35,11 +32,11 @@ def detect_anxiety(text):
     with torch.no_grad():
         outputs = model(**inputs)
     logits = outputs.logits
-    predicted_class = torch.argmax(logits, dim=1).item()  # <-- error here means logits is meta tensor
+    predicted_class = torch.argmax(logits, dim=1).item()
     return label_encoder.inverse_transform([predicted_class])[0]
 
 st.title("How are you feeling today?")
-input_text= st.text_input("Enter your thoughts")
+input_text = st.text_input("Enter your thoughts")
 
 if st.button("detect"):
     if input_text.strip() == "":
