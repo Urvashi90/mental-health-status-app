@@ -52,7 +52,7 @@ def detect_anxiety(text):
     return label_encoder.inverse_transform([predicted_class])[0]
 #UI
 
-st.title("Mental Health status detection bert")
+st.title("How are you feeling today?")
 
 input_text= st.text_input("Enter your thoughts")
 
