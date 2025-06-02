@@ -1,6 +1,6 @@
 import streamlit as st
 import torch
-import pickle 
+import pickle
 from transformers import AutoModelForSequenceClassification, AutoTokenizer
 import re
 import nltk
@@ -14,8 +14,9 @@ from nltk.corpus import stopwords
 # Download NLTK stopwords (only needed once)
 nltk.download('stopwords')
 
-model = AutoModelForSequenceClassification.from_pretrained("Urvashi12Dwivedi/mental-health-bert")
-tokenizer = AutoTokenizer.from_pretrained("Urvashi12Dwivedi/mental-health-bert")
+model = AutoModelForSequenceClassification.from_pretrained(r"Urvashi12Dwivedi/mental-health-bert")
+tokenizer = AutoTokenizer.from_pretrained(r"Urvashi12Dwivedi/mental-health-bert")
+
 label_encoder = pickle.load(open("label_encoder.pkl","rb"))
 
 # Get English stopwords from NLTK
@@ -39,7 +40,6 @@ def clean_statement(statement):
     cleaned_statement = ' '.join(words)
 
     return cleaned_statement
-
 
 
 #
