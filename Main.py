@@ -14,8 +14,8 @@ from nltk.corpus import stopwords
 # Download NLTK stopwords (only needed once)
 nltk.download('stopwords')
 
-model = AutoModelForSequenceClassification.from_pretrained("https://huggingface.co/Urvashi12Dwivedi/mental-health-bert")
-tokenizer = AutoTokenizer.from_pretrained("https://huggingface.co/Urvashi12Dwivedi/mental-health-bert")
+model = AutoModelForSequenceClassification.from_pretrained("Urvashi12Dwivedi/mental-health-bert")
+tokenizer = AutoTokenizer.from_pretrained("Urvashi12Dwivedi/mental-health-bert")
 label_encoder = pickle.load(open("label_encoder.pkl","rb"))
 
 # Get English stopwords from NLTK
