@@ -6,24 +6,25 @@ import re
 import nltk
 from nltk.corpus import stopwords
 
-# Download NLTK stopwords (only needed once)
 nltk.download('stopwords')
 
-device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
+# Make sure transformers & safetensors packages are up to date in your environment
+# pip install --upgrade transformers safetensors
 
-model = AutoModelForSequenceClassification.from_pretrained("Urvashi12Dwivedi/mental-health-bert")
+model_name = "Urvashi12Dwivedi/mental-health-bert"
 
+model = AutoModelForSequenceClassification.from_pretrained(model_name)  # no local_files_only
 model.eval()
 
-tokenizer = AutoTokenizer.from_pretrained("Urvashi12Dwivedi/mental-health-bert")
+tokenizer = AutoTokenizer.from_pretrained(model_name)
 label_encoder = pickle.load(open("label_encoder.pkl","rb"))
 
 stop_words = set(stopwords.words('english'))
 
 def clean_statement(statement):
     statement = statement.lower()
-    statement = re.sub(r'[^\w\s]', '', statement)  # Remove punctuation
-    statement = re.sub(r'\d+', '', statement)      # Remove numbers
+    statement = re.sub(r'[^\w\s]', '', statement)
+    statement = re.sub(r'\d+', '', statement)
     words = statement.split()
     words = [word for word in words if word not in stop_words]
     return ' '.join(words)
@@ -31,13 +32,10 @@ def clean_statement(statement):
 def detect_anxiety(text):
     cleaned_text = clean_statement(text)
     inputs = tokenizer(cleaned_text, return_tensors="pt", padding=True, truncation=True, max_length=512)
-    inputs = {k: v.to(device) for k, v in inputs.items()}  # Move inputs to device
-
     with torch.no_grad():
         outputs = model(**inputs)
-
     logits = outputs.logits
-    predicted_class = torch.argmax(logits, dim=1).item()
+    predicted_class = torch.argmax(logits, dim=1).item()  # <-- error here means logits is meta tensor
     return label_encoder.inverse_transform([predicted_class])[0]
 
 st.title("How are you feeling today?")
